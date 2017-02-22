@@ -1,0 +1,29 @@
+modules:
+- name: ModuleOne
+  arguments:
+  - name: infile
+    isBranch: true
+  - name: outfile
+    isBranch: false
+  - name: digit
+    isBranch: true
+- name: ModuleTwo
+  dependencies:
+    - ModuleOne
+  arguments:
+  - name: infile
+    isBranch: true
+  - name: outfile
+    isBranch: false
+  - name: digit
+    isBranch: true
+- name: ModuleThree
+  dependencies:
+    - ModuleTwo
+  arguments:
+  - name: infile
+    isBranch: true
+  - name: outfile
+    isBranch: false
+  - name: digit
+    isBranch: true
