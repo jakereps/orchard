@@ -7,5 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from .CFT import generate_config_file
+from ._configuration_file_reader import validate
+from ._generator import generate_luigi
 
-__all__ = ['generate_config_file']
+__all__ = ['generate_config_file', 'validate', 'generate_luigi']

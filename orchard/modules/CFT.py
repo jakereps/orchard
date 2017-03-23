@@ -9,7 +9,7 @@
 import yaml
 
 
-def generate_config_file(link_file_path):
+def generate_config_file(link_file_path, output_file_name="config.yaml"):
     to_remove = ['isBranch', 'command', 'optional', 'isFlag']
 
     with open(link_file_path) as fh:
@@ -39,5 +39,5 @@ def generate_config_file(link_file_path):
 
     yaml.SafeDumper.add_representer(type(None), _add_repr)
 
-    with open("config.yaml", 'w') as fh:
+    with open(output_file_name, 'w') as fh:
         yaml.safe_dump(dictionary, fh, default_flow_style=False)
