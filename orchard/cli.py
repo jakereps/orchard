@@ -6,12 +6,12 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import os
 import pkg_resources
 import subprocess
-import shutil
 
 import click
+
+from .modules import generate_config_file
 
 TEMPLATES = pkg_resources.resource_filename('orchard', 'data')
 
@@ -22,15 +22,20 @@ def orchard():
 
 
 @orchard.command()
-@click.argument('filename')
-def init(filename):
-    if not (filename.endswith('.yml') or filename.endswith('.yaml')):
-        filename += '.yml'
+@click.argument('filepath', type=click.Path(exists=True))
+def template(filepath):
+    if not (filepath.endswith('.yml') or filepath.endswith('.yaml')):
+        click.secho('Invalid filetype, please provide a .yml or .yaml link '
+                    'file', fg='red', err=True)
+        click.get_current_context().exit(1)
 
-    shutil.copy(os.path.join(TEMPLATES, 'config.yaml'), filename)
+    try:
+        generate_config_file(filepath)
+    except RuntimeError as e:
+        click.secho(str(e), fg='red', err=True)
+        click.get_current_context().exit(1)
 
-    click.secho('Successfully wrote configuration file to %s' % filename,
-                fg='green')
+    click.secho('Successfully wrote config.yaml', fg='green')
 
 
 @orchard.command()

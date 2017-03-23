@@ -5,3 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
+
+from .CFT import generate_config_file
+
+__all__ = ['generate_config_file']
