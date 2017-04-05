@@ -11,12 +11,12 @@ import sys
 import os
 import yaml
 import filecmp
-from ._configuration_templater import generate_config_file
+from ..file import LinkFile
 
 
 def validate(link_file_path, config_file_path):
     # Simplify both the link and the config files then compare
-    generate_config_file(link_file_path, "linkTest.yaml")
+    LinkFile(link_file_path).template_config_file("linkTest.yaml")
     error_checking = simplify(config_file_path, "configTest.yaml")
     if (error_checking):
         if (error_checking == 1):

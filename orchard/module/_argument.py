@@ -8,12 +8,21 @@
 
 
 class Argument:
-
     def __init__(self, data):
-        self.name = data.get('name', '')
+        self.name = data.get('name')
 
     def add_value(self, value):
         self.value = value
 
     def __repr__(self):
         return self.name
+
+
+class Exclusive:
+    def __init__(self, arguments):
+        self._add_arguments(arguments)
+
+    def _add_arguments(self, arguments):
+        self.arguments = []
+        for argument in arguments:
+            self.arguments.append(Argument(argument))

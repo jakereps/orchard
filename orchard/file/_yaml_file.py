@@ -26,3 +26,11 @@ class YAMLFile:
         if modules:
             self.modules = []
             self._add_modules(modules)
+
+    def write(self, data, filepath):
+        def _add_repr(dumper, value):
+            return dumper.represent_scalar(u'tag:yaml.org,2002:null', '')
+        yaml.SafeDumper.add_representer(type(None), _add_repr)
+
+        with open(filepath, 'w') as fh:
+            yaml.safe_dump(data, fh, default_flow_style=False)

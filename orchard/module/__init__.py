@@ -7,6 +7,6 @@
 # ----------------------------------------------------------------------------
 
 from ._module import Module
-from ._argument import Argument
+from ._argument import Argument, Exclusive
 
-__all__ = ['Module', 'Argument']
+__all__ = ['Module', 'Argument', 'Exclusive']

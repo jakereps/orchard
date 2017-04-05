@@ -6,14 +6,10 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import pkg_resources
-import subprocess
-
 import click
 
-from orchard.core import generate_config_file, validate, generate_luigi
-
-TEMPLATES = pkg_resources.resource_filename('orchard', 'data')
+from orchard.core import validate, generate_luigi
+from orchard.file import LinkFile
 
 
 @click.group()
@@ -30,19 +26,12 @@ def template(filepath):
         click.get_current_context().exit(1)
 
     try:
-        generate_config_file(filepath)
+        LinkFile(filepath).template_config_file()
     except RuntimeError as e:
         click.secho(str(e), fg='red', err=True)
         click.get_current_context().exit(1)
 
     click.secho('Successfully wrote config.yaml', fg='green')
-
-
-@orchard.command()
-@click.argument('filename')
-@click.argument('task')
-def launch(filename, task):
-    subprocess.run(['python', filename, task])
 
 
 @orchard.command()
