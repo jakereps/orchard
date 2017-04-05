@@ -10,7 +10,7 @@ import unittest
 
 from click.testing import CliRunner
 
-from ..cli import orchard
+from orchard.cli import orchard
 
 
 class TestOrchard(unittest.TestCase):

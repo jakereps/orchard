@@ -11,7 +11,7 @@ import subprocess
 
 import click
 
-from .modules import generate_config_file, validate, generate_luigi
+from .core import generate_config_file, validate, generate_luigi
 
 TEMPLATES = pkg_resources.resource_filename('orchard', 'data')
 

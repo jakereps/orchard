@@ -10,8 +10,6 @@ import collections
 
 import yaml
 
-from ..module import Module
-
 
 class YAMLFile:
     modules = None

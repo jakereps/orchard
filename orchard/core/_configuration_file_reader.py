@@ -11,7 +11,7 @@ import sys
 import os
 import yaml
 import filecmp
-from .CFT import generate_config_file
+from ._configuration_templater import generate_config_file
 
 
 def validate(link_file_path, config_file_path):
