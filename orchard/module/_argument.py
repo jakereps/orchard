@@ -8,8 +8,13 @@
 
 
 class Argument:
+    command = None
+    value = None
+
     def __init__(self, data):
         self.name = data.get('name')
+        self.command = data.get('command')
+        self.value = data.get('value')
 
     def add_value(self, value):
         self.value = value
@@ -21,8 +26,15 @@ class Argument:
 class Exclusive:
     def __init__(self, arguments):
         self._add_arguments(arguments)
+        self.name = '(%s)' % ', '.join([arg.name for arg in self.arguments])
 
     def _add_arguments(self, arguments):
         self.arguments = []
         for argument in arguments:
-            self.arguments.append(Argument(argument))
+            arg = Argument(argument)
+            if argument.get('value'):
+                arg.add_value(argument['value'])
+            self.arguments.append(arg)
+
+    def __repr__(self):
+        return self.name

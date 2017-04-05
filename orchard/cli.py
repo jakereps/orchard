@@ -9,12 +9,22 @@
 import click
 
 from orchard.core import validate, generate_luigi
-from orchard.file import LinkFile
+from orchard.file import LinkFile, ConfigFile
 
 
 @click.group()
 def orchard():
     pass
+
+
+@orchard.command()
+@click.argument('filepath', type=click.Path(exists=True))
+@click.argument('link', type=click.Path(exists=True))
+def test(filepath, link):
+    config = ConfigFile(filepath)
+    link_file = LinkFile(link)
+    for module in config.modules:
+        click.echo(module.get_command_line_args(link_file))
 
 
 @orchard.command()
@@ -50,4 +60,6 @@ def build(link_file_path, config_file_path, output):
         click.secho(str(e), fg='red', err=True)
         click.get_current_context().exit(1)
 
-    generate_luigi(config_file_path, link_file_path)
+    link_file = LinkFile(link_file_path)
+    config_file = ConfigFile(config_file_path)
+    generate_luigi(config_file, link_file)

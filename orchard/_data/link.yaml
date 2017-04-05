@@ -4,6 +4,7 @@ config:
   luigi_scheduler_port: 8082
 modules:
 - name: ModuleOne
+  path: module1
   arguments:
   - name: infile
   - name: outfile
@@ -19,6 +20,7 @@ modules:
       command: --required_exclusive_reverse
       isFlag: true
 - name: ModuleTwo
+  path: module2
   dependencies:
     - ModuleOne
   arguments:
@@ -39,6 +41,7 @@ modules:
       command: --optional_exclusive_reverse
       isFlag: true
 - name: ModuleThree
+  path: module3
   dependencies:
     - ModuleTwo
   arguments:

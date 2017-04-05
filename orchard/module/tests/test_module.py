@@ -51,7 +51,7 @@ class TestModules(unittest.TestCase):
         parent = Module(self.link_data[0], from_link=True)
         child = Module(self.link_data[1], from_link=True)
 
-        child.add_dependencies([parent])
+        child.add_dependency(parent)
 
         self.assertIn(parent, child.dependencies)
 
