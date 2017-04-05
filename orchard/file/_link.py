@@ -7,6 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from ._yaml_file import YAMLFile
+from ..module import Module
 
 
 class LinkFile(YAMLFile):
@@ -14,3 +15,7 @@ class LinkFile(YAMLFile):
     def __init__(self, filepath):
         super().__init__(filepath)
         self.config = self.data.get('config')
+
+    def _add_modules(self, modules):
+        for module in modules:
+            self.modules.append(Module(module, from_link=True))

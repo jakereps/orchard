@@ -8,10 +8,12 @@
 
 
 class Argument:
-    command = None
 
     def __init__(self, data):
         self.name = data.get('name', '')
+
+    def add_value(self, value):
+        self.value = value
 
     def __repr__(self):
         return self.name

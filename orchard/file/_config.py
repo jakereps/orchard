@@ -8,6 +8,11 @@
 
 from ._yaml_file import YAMLFile
 
+from ..module import Module
+
 
 class ConfigFile(YAMLFile):
-    pass
+
+    def _add_modules(self, modules):
+        for module in modules:
+            self.modules.append(Module(module))
