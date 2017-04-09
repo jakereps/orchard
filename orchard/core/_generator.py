@@ -22,8 +22,7 @@ def generate_luigi(config_file, link_file):
     fh.write('\n\n')
 
     for module in config_file.modules:
-        module_link_data, = filter(lambda x: x.name == module.name,
-                                   link_file.modules)
+        module_link_data = link_file.get_module_data(module.name)
         fh.write('class ' + module.name + '(ExternalProgramTask):\n')
 
         if module_link_data.dependencies:

@@ -4,12 +4,12 @@ config:
   luigi_scheduler_port: 8082
 modules:
 - name: ModuleOne
-  path: module1
+  executable_path: module1
   arguments:
   - name: infile
   - name: outfile
     command: --out
-    isBranch: false
+    is_branch: false
   - name: digit
     command: -d
   - exclusive:
@@ -20,14 +20,14 @@ modules:
       command: --required_exclusive_reverse
       isFlag: true
 - name: ModuleTwo
-  path: module2
+  executable_path: module2
   dependencies:
     - ModuleOne
   arguments:
   - name: infile
   - name: outfile
     command: --out
-    isBranch: false
+    is_branch: false
   - name: digit
     command: -d
   optionals:
@@ -41,13 +41,13 @@ modules:
       command: --optional_exclusive_reverse
       isFlag: true
 - name: ModuleThree
-  path: module3
+  executable_path: module3
   dependencies:
     - ModuleTwo
   arguments:
   - name: infile
   - name: outfile
     command: --out
-    isBranch: false
+    is_branch: false
   - name: digit
     command: -d

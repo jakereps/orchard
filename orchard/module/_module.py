@@ -16,7 +16,7 @@ class Module:
 
     def __init__(self, module_data, from_link=False):
         self.name = module_data.get('name')
-        self.path = module_data.get('path')
+        self.executable_path = module_data.get('executable_path')
 
         arguments = module_data.get('arguments')
         if arguments:
@@ -36,16 +36,33 @@ class Module:
 
     def get_command_line_args(self, link_file):
         commands = []
-        module_link_data, = filter(lambda x: x.name == self.name,
-                                   link_file.modules)
+        module_link_data = link_file.get_module_data(self.name)
+
         for argument in self.arguments:
+            argument_link_data = \
+                module_link_data.get_argument_data(argument.name)
             if isinstance(argument, Argument):
-                argument_link_data, = filter(lambda x: x.name == argument.name,
-                                             module_link_data.arguments)
                 if argument_link_data.command:
                     commands.append(argument_link_data.command)
-                commands.append(argument.value)
-        return [module_link_data.path, *commands]
+                if not argument.is_flag:
+                    commands.append(argument.value)
+            elif isinstance(argument, Exclusive):
+                selected = argument.get_selected()
+                exc_arg_data = argument_link_data.get_argument(selected.name)
+                if exc_arg_data.command:
+                    commands.append(exc_arg_data.command)
+                if exc_arg_data.is_flag is False:
+                    commands.append(selected.value)
+        return [module_link_data.executable_path, *commands]
+
+    def get_argument_data(self, argument_name):
+        try:
+            argument, = filter(lambda x: x.name == argument_name,
+                               self.arguments)
+        except ValueError:
+            raise ValueError('Unable to retreive linkage data from link file '
+                             'for module: %s.' % argument_name) from None
+        return argument
 
     def add_dependency(self, dependency):
         self.dependencies = self.dependencies or []

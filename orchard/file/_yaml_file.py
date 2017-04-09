@@ -27,6 +27,14 @@ class YAMLFile:
             self.modules = []
             self._add_modules(modules)
 
+    def get_module_data(self, module_name):
+        try:
+            module, = filter(lambda x: x.name == module_name, self.modules)
+        except ValueError:
+            raise ValueError('Unable to retreive linkage data from link file '
+                             'for module: %s.' % module_name) from None
+        return module
+
     def write(self, data, filepath):
         def _add_repr(dumper, value):
             return dumper.represent_scalar(u'tag:yaml.org,2002:null', '')

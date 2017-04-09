@@ -10,11 +10,15 @@
 class Argument:
     command = None
     value = None
+    branchable = False
+    is_flag = False
 
     def __init__(self, data):
         self.name = data.get('name')
         self.command = data.get('command')
         self.value = data.get('value')
+        self.is_flag = data.get('is_flag')
+        self.branchable = data.get('is_branch')
 
     def add_value(self, value):
         self.value = value
@@ -35,6 +39,23 @@ class Exclusive:
             if argument.get('value'):
                 arg.add_value(argument['value'])
             self.arguments.append(arg)
+
+    def get_argument(self, argument_name):
+        try:
+            argument, = filter(lambda x: x.name == argument_name,
+                               self.arguments)
+        except ValueError:
+            raise ValueError('No argument %s found in exclusive: %s' %
+                             (argument_name, self.name)) from None
+        return argument
+
+    def get_selected(self):
+        try:
+            selected, = filter(lambda x: x.value is True, self.arguments)
+        except ValueError:
+            raise ValueError(
+                'Error in exclusive value: %s' % self.name) from None
+        return selected
 
     def __repr__(self):
         return self.name

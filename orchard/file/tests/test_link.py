@@ -26,7 +26,7 @@ class TestLinkFile(unittest.TestCase):
             '  - name: infile\n' \
             '  - name: outfile\n' \
             '    command: --out\n' \
-            '    isBranch: false\n' \
+            '    is_branch: false\n' \
             '  - name: digit\n' \
             '    command: -d\n' \
             '  - exclusive:\n' \

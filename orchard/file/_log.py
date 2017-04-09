@@ -6,8 +6,8 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from ._link import LinkFile
-from ._config import ConfigFile
-from ._log import LogFile
+from ._yaml_file import YAMLFile
 
-__all__ = ['LinkFile', 'ConfigFile', 'LogFile']
+
+class LogFile(YAMLFile):
+    pass
