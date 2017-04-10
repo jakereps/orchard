@@ -46,3 +46,9 @@ class TestLinkFile(unittest.TestCase):
 
         self.assertIsInstance(link_file, LinkFile)
         self.assertEqual(len(link_file.modules), 1)
+
+    def test_module_retrieval_of_invalid_modules(self):
+        link_file = LinkFile(self.yaml_file.name)
+
+        with self.assertRaisesRegex(ValueError, 'retreive'):
+            link_file.get_module_data('ModuleTwo')

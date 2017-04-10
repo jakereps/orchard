@@ -19,16 +19,6 @@ def orchard():
 
 @orchard.command()
 @click.argument('filepath', type=click.Path(exists=True))
-@click.argument('link', type=click.Path(exists=True))
-def test(filepath, link):
-    config = ConfigFile(filepath)
-    link_file = LinkFile(link)
-    for module in config.modules:
-        click.echo(module.get_command_line_args(link_file))
-
-
-@orchard.command()
-@click.argument('filepath', type=click.Path(exists=True))
 def template(filepath):
     if not filepath.endswith('.yaml'):
         click.secho('Invalid filetype, please provide a .yml or .yaml link '
