@@ -5,3 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
+
+import pkg_resources
+
+DATA = pkg_resources.resource_filename('orchard', 'core')

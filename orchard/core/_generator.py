@@ -12,9 +12,9 @@
 # ----------------------------------------------------------------------------
 
 
-def generate_luigi(config_file, link_file):
+def generate_luigi(config_file, link_file, dest="test.py"):
 
-    fh = open('test.py', 'w')
+    fh = open(dest, 'w')
 
     fh.write('import luigi\n')
     fh.write('from luigi.contrib.external_program'

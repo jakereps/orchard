@@ -54,7 +54,7 @@ class Exclusive:
             selected, = filter(lambda x: x.value is True, self.arguments)
         except ValueError:
             raise ValueError(
-                'Error in exclusive value: %s' % self.name) from None
+                'Error in exclusive value: %s' % self.name)
         return selected
 
     def __repr__(self):

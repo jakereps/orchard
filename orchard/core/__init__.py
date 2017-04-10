@@ -8,5 +8,6 @@
 
 from ._configuration_file_reader import validate
 from ._generator import generate_luigi
+from ._branch import branching
 
-__all__ = ['validate', 'generate_luigi']
+__all__ = ['validate', 'generate_luigi', 'branching']
