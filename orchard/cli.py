@@ -42,14 +42,16 @@ def build(link_file_path, config_file_path, output):
     if not (link_file_path.endswith('.yaml') or
             config_file_path.endswith('.yaml')):
         click.secho('Invalid filetype, please provide a .yml or .yaml link '
-                    'file', fg='red', err=True)
-        click.get_current_context().exit(1)
-    try:
-        validate(link_file_path, config_file_path)
-    except RuntimeError as e:
-        click.secho(str(e), fg='red', err=True)
+                    'file', fg='red', err=True, bold=True)
         click.get_current_context().exit(1)
 
-    link_file = LinkFile(link_file_path)
-    config_file = ConfigFile(config_file_path)
-    generate_luigi(config_file, link_file)
+    try:
+        link_file = LinkFile(link_file_path)
+        config_file = ConfigFile(config_file_path)
+        if not validate(link_file_path, config_file_path):
+            click.secho('Invalid configuration file.', fg='red', err=True)
+            click.get_current_context().exit(1)
+        generate_luigi(config_file, link_file)
+    except (ValueError, RuntimeError) as e:
+        click.secho(str(e), fg='red', err=True, bold=True)
+        click.get_current_context().exit(1)

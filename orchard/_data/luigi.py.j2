@@ -1,0 +1,78 @@
+import os
+import logging
+import subprocess
+import tempfile
+
+import luigi
+
+from luigi.contrib.external_program import (
+    ExternalProgramRunError,
+    ExternalProgramTask
+)
+
+logger = logging.getLogger('luigi-interface')
+
+class OrchardExternalProgramTask(ExternalProgramTask):
+
+    def run(self):
+        args = ' '.join(self.program_args())
+
+        logger.info('Running command: %s', args)
+        tmp_stdout = tempfile.TemporaryFile()
+        tmp_stderr = tempfile.TemporaryFile()
+        env = self.program_environment()
+        proc = subprocess.run(
+            args,
+            env=env,
+            stdout=tmp_stdout,
+            stderr=tmp_stderr,
+            shell=True
+        )
+
+        try:
+            success = proc.returncode == 0
+
+            stdout = self._clean_output_file(tmp_stdout)
+            stderr = self._clean_output_file(tmp_stderr)
+
+            if stdout:
+                logger.info('Program stdout:\n%s' % stdout)
+            if stderr:
+                if self.always_log_stderr or not success:
+                    logger.info('Program stderr:\n%s' % stderr)
+
+            if not success:
+                raise ExternalProgramRunError(
+                    'Program failed with return code=%s:' % proc.returncode,
+                    args, env=env, stdout=stdout, stderr=stderr)
+        finally:
+            tmp_stderr.close()
+            tmp_stdout.close()
+
+
+{% for module in config.modules %}
+class {{ module.name }}(OrchardExternalProgramTask):
+    {%- if module.dependencies %}
+    def requires(self):
+        return {{ module.dependencies }}
+    {% endif -%}
+
+    {% if module.arguments or module.optionals %}
+    def program_args(self):
+        return {{ module.get_command_line_args(link) }}
+    {%- endif %}
+
+    def on_success(self):
+        with open('log.txt', 'w+') as fh:
+            fh.write(' '.join(self.program_args))
+
+    def complete(self):
+        if os.path.exists('log.txt'):
+            with open('log.txt') as fh:
+                args = ' '.join(self.program_args())
+                return args in fh.readlines()
+        return False
+{% endfor %}
+
+if __name__ == '__main__':
+    luigi.run()

@@ -11,39 +11,23 @@
 # will generate a luigi file named test.py
 # ----------------------------------------------------------------------------
 
+import pkg_resources
 
-def generate_luigi(config_file, link_file, dest="test.py"):
+import jinja2
 
-    fh = open(dest, 'w')
+TEMPLATES = pkg_resources.resource_filename('orchard', '_data')
 
-    fh.write('import luigi\n')
-    fh.write('from luigi.contrib.external_program'
-             ' import ExternalProgramTask\n')
-    fh.write('\n\n')
 
-    for module in config_file.modules:
-        module_link_data = link_file.get_module_data(module.name)
-        fh.write('class ' + module.name + '(ExternalProgramTask):\n')
+def generate_luigi(config_file, link_file, dest="out.py"):
 
-        if module_link_data.dependencies:
-            dependencies = []
-            for dependency in module_link_data.dependencies:
-                dependencies.append('%s()' % dependency.name)
-            fh.write("    def requires(self):\n")
-            fh.write("        return %s\n\n" % ', '.join(dependencies))
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES))
+    template = env.get_template('luigi.py.j2')
 
-        fh.write('    def program_args(self):\n')
-        fh.write('        return %s\n' %
-                 module.get_command_line_args(link_file))
+    skeleton = {'config': config_file, 'link': link_file}
+    rendered_content = template.render(skeleton)
 
-        fh.write("\n")
-        fh.write("    def output(self):\n")
-        fh.write("        return luigi.LocalTarget(")
-        for argument in module.arguments:
-            if argument.name == 'outfile':
-                fh.write('\'' + argument.value + '\')\n')
-        fh.write("\n\n")
+    if not dest.endswith('.py'):
+        dest += '.py'
 
-    fh.write("if __name__ == '__main__':\n")
-    fh.write("    luigi.run()\n")
-    fh.close()
+    with open(dest, 'w') as fh:
+        fh.write(rendered_content)

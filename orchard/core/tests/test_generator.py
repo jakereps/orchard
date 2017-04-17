@@ -26,8 +26,10 @@ class TestGenerator(unittest.TestCase):
         link_file = LinkFile(link_path)
         config_file = ConfigFile(config_path)
 
-        with tempfile.NamedTemporaryFile('w+') as fh:
-            generate_luigi(config_file, link_file, fh.name)
+        with tempfile.TemporaryDirectory() as tmp:
+            file_path = os.path.join(tmp, 'out.py')
+            generate_luigi(config_file, link_file, file_path)
 
-            self.assertTrue(os.path.exists(fh.name))
-            self.assertIn('ExternalProgramTask', fh.read())
+            self.assertTrue(os.path.exists(file_path))
+            with open(file_path) as fh:
+                self.assertIn('ExternalProgramTask', fh.read())

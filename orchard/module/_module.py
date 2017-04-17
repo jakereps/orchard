@@ -45,14 +45,14 @@ class Module:
                 if argument_link_data.command:
                     commands.append(argument_link_data.command)
                 if not argument.is_flag:
-                    commands.append(argument.value)
+                    commands.append(str(argument.value))
             elif isinstance(argument, Exclusive):
                 selected = argument.get_selected()
                 exc_arg_data = argument_link_data.get_argument(selected.name)
                 if exc_arg_data.command:
                     commands.append(exc_arg_data.command)
                 if exc_arg_data.is_flag is False:
-                    commands.append(selected.value)
+                    commands.append(str(selected.value))
         return [module_link_data.executable_path, *commands]
 
     def get_argument_data(self, argument_name):

@@ -64,7 +64,7 @@ class TestOrchard(unittest.TestCase):
                                         ['build', link_path, config_path])
 
             self.assertEqual(result.exit_code, 0)
-            self.assertTrue(os.path.exists(os.path.join(fh, 'test.py')))
+            self.assertTrue(os.path.exists(os.path.join(fh, 'out.py')))
 
     def test_build_fail_extension(self):
         with self.runner.isolated_filesystem() as fh:
@@ -86,7 +86,7 @@ class TestOrchard(unittest.TestCase):
 
             self.assertEqual(result.exit_code, 1)
             self.assertTrue(
-                not os.path.exists(os.path.join(fh, 'test.py')))
+                not os.path.exists(os.path.join(fh, 'out.py')))
 
 
 if __name__ == '__main__':

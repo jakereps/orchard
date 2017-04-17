@@ -23,29 +23,11 @@ def validate(link_file_path, config_file_path):
         config_path = os.path.join(tmp, 'config_test.yaml')
 
         LinkFile(link_file_path).template_config_file(link_path)
-        error_checking = simplify(config_file_path, config_path)
-        if (error_checking == 1):
-            print("User failed to provide required input arguments")
-            return 1
-        elif (error_checking == 2):
-            print("User provided too many exclusive arguments")
-            return 1
-        elif (error_checking == 3):
-            print("User failed to provide a single exclusive argument")
-            return 1
-        else:
-            print("Configuration arguments were entered properly")
+        simplify(config_file_path, config_path)
 
-        print("Comparing files")
         sameFile = filecmp.cmp(link_path, config_path)
-    # Delete files after comparison
 
-    if (sameFile):
-        print("Files have passed validation")
-        return 0
-    else:
-        print("Files have failed validation")
-        return 1
+    return sameFile
 
 
 def simplify(config_file_path, output_file_name):
@@ -54,12 +36,15 @@ def simplify(config_file_path, output_file_name):
     with open(config_file_path) as fh:
         dictionary = yaml.load(fh, Loader=yaml.Loader)
 
-    for modules in dictionary['modules']:
-        for arguments in modules.get('arguments', []):
+    for module in dictionary['modules']:
+        name = module.get('name', 'Unknown?')
+        for arguments in module.get('arguments', []):
             for key in arguments:
                 if key not in to_ignore:
                     if (arguments[key] is None):
-                        return 1
+                        raise ValueError(
+                            "Missing required input argument %s in module: %s."
+                            % (key, name))
                     else:
                         arguments[key] = None
 
@@ -70,14 +55,16 @@ def simplify(config_file_path, output_file_name):
                         if (exclusives[key] is None):
                             pass
                         elif (exclusivity_test):
-                            return 2
+                            raise ValueError("User provided too many "
+                                             "exclusive arguments on %s" % key)
                         else:
                             exclusivity_test = True
                             exclusives[key] = None
                 if (not exclusivity_test):
-                    return 3
+                    raise ValueError("User failed to provide a single "
+                                     "exclusive argument")
 
-        for optionals in modules.get('optionals', []):
+        for optionals in module.get('optionals', []):
             for key in optionals:
                 if key not in to_ignore:
                     optionals[key] = None
@@ -89,7 +76,8 @@ def simplify(config_file_path, output_file_name):
                         if (exclusives[key] is None):
                             pass
                         elif (exclusivity_test):
-                            return 2
+                            raise ValueError("User provided too many "
+                                             "exclusive arguments on %s" % key)
                         else:
                             exclusivity_test = True
                             exclusives[key] = None
