@@ -1,4 +1,0 @@
-luigi
-jinja2
-click
-pyyaml
