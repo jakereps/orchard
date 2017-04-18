@@ -1,0 +1,56 @@
+modules:
+- arguments:
+  - input: /scratch/jk788/db/Chunk_1_seqs.fasta
+  - output: /scratch/jk788/chunks
+  - size_gb: 5
+  name: chunk
+# - arguments:
+#   - fasta:
+#   - index:
+#   - results:
+#   name: binner
+#   optionals:
+#   - edit_tolerance:
+#   - min_seeds:
+#   - num_threads:
+#   - seed_gap:
+#   - seed_size:
+# - arguments:
+#   - fasta:
+#   - index:
+#   name: build
+#   optionals:
+#   - fm_sample_interval:
+# - arguments:
+#   - files:
+#   - output:
+#   name: collapse
+# - arguments:
+#   - input:
+#   - output:
+#   - index:
+#   - lca:
+#   name: inform
+#   optionals:
+#   - threads:
+#   - exclusive:
+#     - family:
+#     - genus:
+# - arguments:
+#   - fastq:
+#   - fasta:
+#   - exclusive:
+#     - lcd:
+#     - lcdqual:
+#     - segment:
+#   name: readprep
+#   optionals:
+#   - adapters:
+#   - adapter_tolerance:
+#   - threads:
+#   - quality_min:
+#   - quality_threshold:
+# - arguments:
+#   - index:
+#   - ncbi_tree_dump:
+#   name: treebuild

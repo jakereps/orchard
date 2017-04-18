@@ -1,0 +1,104 @@
+config:
+  pipeline_api_version: 1
+  luigi_scheduler_ip: 127.0.0.1
+  luigi_scheduler_port: 8082
+modules:
+- name: chunk
+  executable_path: $HOME/vedro/target/release/vedro-chunk
+  arguments:
+  - name: input
+    command: -i
+  - name: output
+    command: -o
+  - name: size_gb
+    command: -g
+# - name: binner
+#   executable_path: $HOME/vedro/target/release/vedro-binner
+#   arguments:
+#   - name: fasta
+#     command: -f
+#   - name: index
+#     command: -i
+#   - name: results
+#     command: -r
+#   optionals:
+#   - name: edit_tolerance
+#     command: --edits
+#   - name: min_seeds
+#     command: --min-seeds
+#   - name: num_threads
+#     command: -t
+#   - name: seed_gap
+#     command: --seed-gap
+#   - name: seed_size
+#     command: --seed-size
+# - name: build
+#   executable_path: $HOME/vedro/target/release/vedro-build
+#   arguments:
+#   - name: fasta
+#     command: -f
+#   - name: index
+#     command: -i
+#   optionals:
+#   - name: fm_sample_interval
+#     command: --sample-interval
+# - name: collapse
+#   executable_path: $HOME/vedro/target/release/vedro-collapse
+#   arguments:
+#   - name: files
+#   - name: output
+#     command: -o
+# - name: inform
+#   executable_path: $HOME/vedro/target/release/vedro-inform
+#   arguments:
+#   - name: input
+#     command: -x
+#   - name: output
+#     command: -o
+#   - name: index
+#     command: -i
+#   - name: lca
+#     command: --lca
+#   optionals:
+#   - name: threads
+#     command: -t
+#   - exclusive:
+#     - name: family
+#       command: --family
+#       is_flag: true
+#     - name: genus
+#       command: --genus
+#       is_flag: true
+# - name: readprep
+#   executable_path: $HOME/vedro/target/release/vedro-readprep
+#   arguments:
+#   - name: fastq
+#   - name: fasta
+#     command: -o
+#   - exclusive:
+#     - name: lcd
+#       command: --lcd
+#       is_flag: true
+#     - name: lcdqual
+#       command: --lcdqual
+#       is_flag: true
+#     - name: segment
+#       command: --segment
+#   optionals:
+#   - name: adapters
+#     command: --adapters
+#   - name: adapter_tolerance
+#     command: --adapter-tolerance
+#   - name: threads
+#     command: -t
+#   - name: quality_min
+#     command: --quality_min
+#   - name: quality_threshold
+#     command: --quality_threshold
+# - name: treebuild
+#   executable_path: $HOME/vedro/target/release/vedro-tree-build
+#   arguments:
+#   - name: index
+#     command: -i
+#   - name: ncbi_tree_dump
+#     command: -d
